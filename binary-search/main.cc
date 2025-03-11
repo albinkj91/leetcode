@@ -4,33 +4,35 @@ using namespace std;
 
 int search(vector<int>& nums, int target)
 {
-	int current{static_cast<int>(nums.size()) / 2};
-	int step{current / 2};
-	while(nums.at(current) != target)
+	if(nums.at(0) == target)
+		return 0;
+	int left{0};
+	int right{static_cast<int>(nums.size()) - 1};
+	int mid{right / 2};
+	while(left != right)
 	{
-		cout << "current: " << current << endl;
-		cout << "step: " << step << endl;
-		if(step == 0)
-		{
-			return -1;
-		}
-		else if(nums.at(current) < target)
-		{
-			current += step;
-		}
-		else if(nums.at(current) > target)
-		{
-			current -= step;
-		}
-		step /= 2;
+		if(nums.at(mid) < target)
+			left = mid + 1;
+		else if(nums.at(mid) > target)
+			right = mid - 1;
+
+		mid = (right+left) / 2;
+		if(nums.at(mid) == target)
+			return mid;
 	}
-	return current;
+	return -1;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-	vector<int> nums{-1, 0, 3, 5, 9, 12};
-	int target{-1};
+	if(argc != 2)
+	{
+		cerr << "Invalid arguments" << endl;
+		return -1;
+	}
+
+	vector<int> nums{2, 5};
+	int target{stoi(argv[1])};
 	int index{search(nums, target)};
 	cout << index << endl;
 }
