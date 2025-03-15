@@ -8,24 +8,29 @@ vector<int> dailyTemperatures(vector<int>& temperatures)
 {
 	stack<int> s{};
 	vector<int> days{};
-	s.push(temperatures.at(0));
-	for(size_t i{1}; i < temperatures.size(); ++i)
+	int count{0};
+	for(size_t i{0}; i < temperatures.size(); ++i)
 	{
-		int count{1};
-		while(!s.empty() && (s.top() < temperatures.at(i)))
+		cout << "temp: " << temperatures.at(i) << ", ";
+		while(!s.empty() && (temperatures.at(s.top()) < temperatures.at(i)))
 		{
-			days.push_back(count++);
+			cout << "count: " << count << ", ";
+			days.at(s.top()) = i - s.top();
 			s.pop();
 		}
-		s.push(temperatures.at(i));
+		cout << endl;
+		s.push(i);
+		days.push_back(0);
+		++count;
 	}
 	return days;
 }
 
 int main()
 {
+	//Should print [1,1,4,2,1,1,0,0]
 	vector<int> temperatures{73, 74, 75, 71, 69, 72, 76, 73};
 	vector<int> result{dailyTemperatures(temperatures)};
 	copy(result.begin(), result.end(),
-			ostream_iterator<int>(cout, "\n"));
+			ostream_iterator<int>(cout, " "));
 }
