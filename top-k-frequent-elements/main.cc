@@ -9,41 +9,32 @@ using namespace std;
 
 vector<int> topKFrequent(vector<int>& nums, int k)
 {
-	if(nums.size() == 1)
-		return vector<int>{nums.at(0)};
-	unordered_map<int, int> hmap{};
-
-	for(size_t i{0}; i < nums.size(); ++i)
-	{
-		if(hmap.find(nums.at(i)) != hmap.end())
-			hmap.at(nums.at(i))++;
+	unordered_map<int, int> count{};
+	for(auto const n: nums)
+		if(count.find(n) != count.end())
+			++count.at(n);
 		else
-			hmap.emplace(nums.at(i), 1);
-	}
+			count.emplace(n, 1);
 
-	vector<vector<int>> freq(nums.size());
-	for_each(hmap.begin(), hmap.end(),
-			[&freq](pair<int, int> p)
-			{
-				freq.at(p.second-1).push_back(p.first);
-			});
+	vector<vector<int>> freq(nums.size() + 1);
+	for(auto const& it : count)
+		freq.at(it.second).push_back(it.first);
 
 	vector<int> result{};
-	for(auto i{freq.size()-1}; k > 0; --i)
-	{
-		for(unsigned j{}; j < freq.at(i).size() && k > 0; ++j)
+	for(size_t i{freq.size()-1}; i > 0; --i)
+		for(auto const& it : freq.at(i))
 		{
-			result.push_back(freq.at(i).at(j));
-			--k;
+			result.push_back(it);
+			if(static_cast<int>(result.size()) == k)
+				return result;
 		}
-	}
 	return result;
 }
 
-void print(vector<int> result)
+void print(vector<int> & v)
 {
-	copy(result.begin(), result.end(),
-			ostream_iterator<int>{cout, " "});
+	copy(v.begin(), v.end(),
+			ostream_iterator<int>{cout, ","});
 	cout << endl;
 }
 
@@ -52,11 +43,14 @@ int main()
 	vector<int> nums1{7,7};
 	vector<int> nums2{1,2};
 	vector<int> nums3{1,2,2,3,3,3};
+	vector<int> nums4{5,2,6,8,2,45,78,34,23,2,46,67,68,4,3,4,6,8,9,7,8,87,79,6,34,3,5};
 	auto result1{topKFrequent(nums1, 1)};
 	auto result2{topKFrequent(nums2, 2)};
 	auto result3{topKFrequent(nums3, 2)};
+	auto result4{topKFrequent(nums4, 4)};
 
 	print(result1);
 	print(result2);
 	print(result3);
+	print(result4);
 }
