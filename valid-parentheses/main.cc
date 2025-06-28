@@ -42,7 +42,7 @@ bool isValid(string const& s)
 				return false;
 		}
 	}
-	if(pile.size() >= 1)
+	if(pile.empty())
 		return false;
 	return true;
 }

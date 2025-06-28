@@ -27,6 +27,7 @@ int carFleet(int target, vector<int>& position, vector<int>& speed) {
     for(size_t i{1}; i < cars.size(); ++i)
     {
         double time = (target - cars.at(i).pos) / static_cast<double>(cars.at(i).speed);
+        cout << "Time: " << time << endl;
         if(time > current_fleet_time)
         {
             ++fleets;

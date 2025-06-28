@@ -8,8 +8,8 @@ vector<int> dailyTemperatures(vector<int>& temperatures)
 {
 	stack<int> s{};
 	vector<int> days{};
-	int count{0};
-	for(size_t i{0}; i < temperatures.size(); ++i)
+	int count{};
+	for(size_t i{}; i < temperatures.size(); ++i)
 	{
 		cout << "temp: " << temperatures.at(i) << ", ";
 		while(!s.empty() && (temperatures.at(s.top()) < temperatures.at(i)))
