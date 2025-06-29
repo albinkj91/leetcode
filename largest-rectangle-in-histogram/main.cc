@@ -1,88 +1,24 @@
 #include <iostream>
 #include <vector>
+#include <stack>
 using namespace std;
 
 int largestRectangleArea(vector<int>& heights) {
-    int min{heights.at(0)};
-    int largest_area1{heights.at(0)};
-    int reserve{0};
-    int rect_count{1};
+    stack<int> s{};
+    int max_area{};
 
-    for(size_t i{1}; i < heights.size(); ++i)
+    for(size_t i{}; i <= heights.size(); ++i)
     {
-        if(heights.at(i) >= min)
+        while(!s.empty() && (i == heights.size() || heights.at(s.top()) >= heights.at(i)))
         {
-            if((largest_area1 + min) <= heights.at(i))
-            {
-                largest_area1 = heights.at(i);
-                min = heights.at(i);
-                rect_count = 1;
-            }
-            else
-            {
-                largest_area1 += min;
-                ++rect_count;
-            }
+            int height = heights.at(s.top());
+            s.pop();
+            int width = s.empty() ? i : i - s.top() - 1;
+            max_area = max(max_area, height * width);
         }
-        else if(largest_area1 <= ((rect_count + 1) * heights.at(i)))
-        {
-            ++rect_count;
-            largest_area1 = (rect_count) * heights.at(i);
-            min = heights.at(i);
-        }
-        else
-        {
-            min = heights.at(i);
-            rect_count = 1;
-            if(largest_area1 > reserve)
-                reserve = largest_area1;
-            largest_area1 = 0;
-        }
+        s.push(i);
     }
-    if(reserve > largest_area1)
-        largest_area1 = reserve;
-
-    if(heights.size() < 2)
-        return heights.at(0);
-    min = heights.at(heights.size() - 1);
-    int largest_area2{heights.at(heights.size() - 1)};
-    rect_count = 1;
-    reserve = 0;
-
-    for(size_t i{heights.size()-2}; i > 0; --i)
-    {
-        if(heights.at(i) >= min)
-        {
-            if((largest_area2 + min) <= heights.at(i))
-            {
-                largest_area2 = heights.at(i);
-                min = heights.at(i);
-                rect_count = 1;
-            }
-            else
-            {
-                largest_area2 += min;
-                ++rect_count;
-            }
-        }
-        else if(largest_area2 <= ((rect_count + 1) * heights.at(i)))
-        {
-            ++rect_count;
-            largest_area2 = (rect_count) * heights.at(i);
-            min = heights.at(i);
-        }
-        else
-        {
-            min = heights.at(i);
-            rect_count = 1;
-            if(largest_area2 > reserve)
-                reserve = largest_area2;
-            largest_area2 = 0;
-        }
-    }
-    if(reserve > largest_area2)
-        largest_area2 = reserve;
-    return largest_area1 >= largest_area2 ? largest_area1 : largest_area2;
+    return max_area;
 }
 
 int main()
