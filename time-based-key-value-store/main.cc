@@ -30,23 +30,15 @@ public:
 
     void set(string key, string value, int timestamp)
     {
-        if(map.find(key) != map.end())
-        {
-            map.at(key).push_back(pair<int, string>{timestamp, value});
-        }
-        else
-        {
+        if(map.find(key) == map.end())
             map.emplace(key, vector<pair<int, string>>{});
-            map.at(key).push_back(pair<int, string>{timestamp, value});
-        }
+        map.at(key).push_back(pair<int, string>{timestamp, value});
     }
     
     string get(string key, int timestamp)
     {
         if(map.find(key) != map.end())
-        {
             return binary_search(map.at(key), timestamp);
-        }
         return "";
     }
 
