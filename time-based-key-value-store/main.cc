@@ -1,21 +1,43 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <vector>
 using namespace std;
 
 class TimeMap
 {
 public:
+    string binary_search(vector<pair<int, string>> const& timestamps, int const key)
+    {
+        int l{};
+        int r{static_cast<int>(timestamps.size())-1};
+        int mid{r/2};
+
+        while(l <= r)
+        {
+            if(timestamps.at(mid).first == key)
+                return timestamps.at(mid).second;
+            else if(key < timestamps.at(mid).first)
+                r = mid - 1;
+            else if(key > timestamps.at(mid).first)
+                l = mid + 1;
+            mid = (l+r) / 2;
+        }
+        if(mid >= 0 && timestamps.at(mid).first < key)
+            return timestamps.at(mid).second;
+        return "";
+    }
+
     void set(string key, string value, int timestamp)
     {
         if(map.find(key) != map.end())
         {
-            map.at(key).emplace(timestamp, value);
+            map.at(key).push_back(pair<int, string>{timestamp, value});
         }
         else
         {
-            map.emplace(key, unordered_map<int, string>{});
-            map.at(key).emplace(timestamp, value);
+            map.emplace(key, vector<pair<int, string>>{});
+            map.at(key).push_back(pair<int, string>{timestamp, value});
         }
     }
     
@@ -23,16 +45,13 @@ public:
     {
         if(map.find(key) != map.end())
         {
-            if(map.at(key).find(timestamp) != map.at(key).end())
-                return map.at(key).at(timestamp);
-            else
-                return map.at(key).begin()->second;
+            return binary_search(map.at(key), timestamp);
         }
         return "";
     }
 
 private:
-    unordered_map<string, unordered_map<int, string>> map{};
+    unordered_map<string, vector<pair<int, string>>> map{};
 };
 
 int main()
