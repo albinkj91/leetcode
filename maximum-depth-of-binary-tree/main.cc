@@ -1,3 +1,4 @@
+#include <algorithm>
 using namespace std;
 
 struct TreeNode {
@@ -9,16 +10,10 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-TreeNode* invertTree(TreeNode* root) {
+int maxDepth(TreeNode* root) {
     if(root == nullptr)
-        return nullptr;
-    TreeNode* tmp{root->left};
-    root->left = root->right;
-    root->right = tmp;
-
-    invertTree(root->left);
-    invertTree(root->right);
-    return root;
+        return 0;
+    return 1 + max(maxDepth(root->left), maxDepth(root->right));
 }
 
 int main()
